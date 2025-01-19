@@ -120,6 +120,7 @@ end
 
 function M.setup()
   require('beeline.lazyload')
+  require('beeline.statusline')
 end
 
 return M
