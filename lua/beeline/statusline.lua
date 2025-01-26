@@ -148,7 +148,7 @@ local function file_info()
     lazy = { icon = '%#StatusLineLazy# 💤 ', label = 'LAZY' },
     Trouble = { icon = '%#StatusLineTrouble#  ', label = 'TROUBLE' },
     TelescopePrompt = { icon = '  ', label = 'TELESCOPE' },
-    ['neotest-summary'] = { icon = ' 󰙨 ', label = 'NEOTEST' },
+    neotest = { icon = ' 󰙨 ', label = 'NEOTEST' },
   }
 
   for k, v in pairs(filetypes) do
