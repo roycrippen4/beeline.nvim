@@ -52,8 +52,7 @@ function M.prev()
   vim.cmd(curbufIndex == 1 and 'b' .. bufs[#bufs] or 'b' .. bufs[curbufIndex - 1])
 end
 
----@param bufnr integer
-function M.close_buffer(bufnr)
+function M.close_buffer()
   if vim.bo.buftype == 'terminal' then
     vim.cmd(vim.bo.buflisted and 'set nobl | enew' or 'hide')
   else
@@ -63,7 +62,7 @@ function M.close_buffer(bufnr)
       return
     end
 
-    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local bufnr = vim.api.nvim_get_current_buf()
     local curBufIndex = M.get_buf_index(bufnr)
     local bufhidden = vim.bo.bufhidden
 
@@ -98,6 +97,11 @@ function M.close_buffer(bufnr)
 
   vim.cmd.redrawtabline()
 end
+
+vim.api.nvim_create_user_command('BeelineBufNext', M.next, {})
+vim.api.nvim_create_user_command('BeelineBufPrev', M.prev, {})
+vim.api.nvim_create_user_command('BeelineBufClose', M.close_buffer, {})
+
 ---@param n integer
 function M.move_buf(n)
   local bufs = vim.t.bufs
