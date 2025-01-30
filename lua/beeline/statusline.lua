@@ -176,6 +176,13 @@ local function git()
   return branch_name .. added .. changed .. removed .. '%#StatusLineDefaultSep#  '
 end
 
+local function search()
+  if #vim.g.searchcount_string == 0 then
+    return ''
+  end
+  return '%#StatusLineLspWarning#󰍉 ' .. vim.g.searchcount_string
+end
+
 local function lsp_diagnostics()
   if vim.bo.ft == 'lazy' then
     return ''
@@ -310,6 +317,7 @@ return function()
     mode(),
     file_info(),
     git(),
+    search(),
     -- '%=',
     -- package_info(),
     '%=',
