@@ -176,11 +176,26 @@ local function git()
   return branch_name .. added .. changed .. removed .. '%#StatusLineDefaultSep#  '
 end
 
+local searchcount_text = ''
+vim.api.nvim_create_autocmd('CursorMoved', {
+  group = augroup('StatusLineSearchCount', { clear = true }),
+  callback = function()
+    local searchcount = vim.fn.searchcount()
+    if vim.v.hlsearch == 0 then
+      return
+    end
+
+    if searchcount.exact_match == 0 then
+      vim.schedule(vim.cmd.nohlsearch)
+      searchcount_text = ''
+    else
+      searchcount_text = searchcount.current .. '/' .. searchcount.total
+    end
+  end,
+})
+
 local function search()
-  if #vim.g.searchcount_string == 0 then
-    return ''
-  end
-  return '%#StatusLineLspWarning#󰍉 ' .. vim.g.searchcount_string
+  return #searchcount_text == 0 and '' or '%#StatusLineSearchCount#󰍉 ' .. searchcount_text
 end
 
 local function lsp_diagnostics()
@@ -318,8 +333,6 @@ return function()
     file_info(),
     git(),
     search(),
-    -- '%=',
-    -- package_info(),
     '%=',
     lsp_diagnostics(),
     lsp_status(),
