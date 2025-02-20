@@ -147,7 +147,8 @@ local function file_info()
     NvimTree = { icon = '%#StatusLineNvimTree#  ', label = 'NVIMTREE' },
     lazy = { icon = '%#StatusLineLazy# 💤 ', label = 'LAZY' },
     Trouble = { icon = '%#StatusLineTrouble#  ', label = 'TROUBLE' },
-    TelescopePrompt = { icon = '  ', label = 'TELESCOPE' },
+    snacks_picker_input = { icon = '  ', label = 'PICKER' },
+    snacks_input = { icon = ' 󰙏 ', label = 'INPUT' },
     neotest = { icon = ' 󰙨 ', label = 'NEOTEST' },
   }
 
@@ -176,11 +177,34 @@ local function git()
   return branch_name .. added .. changed .. removed .. '%#StatusLineDefaultSep#  '
 end
 
+local virt_ns = vim.api.nvim_create_namespace('SearchVirt')
 local searchcount_text = ''
+
+---@class SearchCount
+---@field current number
+---@field exact_match number
+---@field incomplete number
+---@field maxcount number
+---@field total number
+
+---Draws the virtual text into the buffer
+---@param count SearchCount
+local function draw_virt(count)
+  if not count or (count.current == 0 and count.total == 0) then
+    return
+  end
+  vim.api.nvim_buf_set_extmark(0, virt_ns, vim.api.nvim_win_get_cursor(0)[1] - 1, 0, {
+    virt_text = { { '[' .. count.current .. '/' .. count.total .. ']', 'SearchVirtualText' } },
+    virt_text_pos = 'eol',
+    hl_mode = 'combine',
+  })
+end
+
 vim.api.nvim_create_autocmd('CursorMoved', {
   group = augroup('StatusLineSearchCount', { clear = true }),
   callback = function()
     local searchcount = vim.fn.searchcount()
+    vim.api.nvim_buf_clear_namespace(0, virt_ns, 0, -1)
     if vim.v.hlsearch == 0 then
       return
     end
@@ -188,8 +212,10 @@ vim.api.nvim_create_autocmd('CursorMoved', {
     if searchcount.exact_match == 0 then
       vim.schedule(vim.cmd.nohlsearch)
       searchcount_text = ''
+      vim.api.nvim_buf_clear_namespace(0, virt_ns, 0, -1)
     else
       searchcount_text = searchcount.current .. '/' .. searchcount.total
+      draw_virt(searchcount)
     end
   end,
 })
