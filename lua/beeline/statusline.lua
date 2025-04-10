@@ -209,7 +209,7 @@ vim.api.nvim_create_autocmd('CursorMoved', {
       return
     end
 
-    if searchcount.exact_match == 0 then
+    if searchcount.exact_match == 0 or not searchcount.current or not searchcount.total then
       vim.schedule(vim.cmd.nohlsearch)
       searchcount_text = ''
       vim.api.nvim_buf_clear_namespace(0, virt_ns, 0, -1)
