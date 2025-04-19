@@ -46,8 +46,8 @@ local modes = {
 
   -- Insert
   ['i'] = { text = 'INSERT', hl = 'StatusLineInsertMode', icon = insert_icon },
-  ['ic'] = { text = 'INSERT (completion)', hl = 'StatusLineInsertMode', icon = insert_icon },
-  ['ix'] = { text = 'INSERT completion', hl = 'StatusLineInsertMode', icon = insert_icon },
+  ['ic'] = { text = 'INSERT', hl = 'StatusLineInsertMode', icon = insert_icon },
+  ['ix'] = { text = 'INSERT', hl = 'StatusLineInsertMode', icon = insert_icon },
 
   -- Terminal   
   ['t'] = { text = 'TERMINAL', hl = 'StatusLineTerminalMode', icon = '  ' },
