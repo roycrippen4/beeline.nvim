@@ -87,10 +87,10 @@ local function add_file_info(name, bufnr)
     local maxname_len = 16
 
     local idx
-    if require('poon').mark.is_marked(bufnr) then
+    if require('poon').is_marked(bufnr) then
       local full_path = vim.api.nvim_buf_get_name(bufnr)
       local relative_path = vim.fn.fnamemodify(full_path, ':.')
-      idx = require('poon').mark.get_index(relative_path)
+      idx = require('poon').mark_get_index(relative_path)
     end
 
     local marked_on = '%#TbLineMarkedBufOn# ' .. '󰫈 '
