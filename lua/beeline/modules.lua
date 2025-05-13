@@ -21,9 +21,9 @@ vim.cmd("function! TbGotoTab(tabnr,b,c,d) \n execute a:tabnr ..'tabnext' \n endf
 -------------------------------------------------------- functions ------------------------------------------------------------
 --- gets the width of the nvim-tree window
 ---@return integer
-local function get_nvim_tree_width()
+local function get_tree_width()
   for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.bo[vim.api.nvim_win_get_buf(win)].ft == 'NvimTree' then
+    if vim.bo[vim.api.nvim_win_get_buf(win)].ft == 'NvimTree' or vim.bo[vim.api.nvim_win_get_buf(win)].ft == 'neo-tree' then
       return vim.api.nvim_win_get_width(win) + 1
     end
   end
@@ -136,7 +136,7 @@ local M = {}
 --- @return string
 function M.bufferlist()
   local buffers = {} -- buffersults
-  local available_space = vim.o.columns - get_nvim_tree_width() - get_btns_width() - 5
+  local available_space = vim.o.columns - get_tree_width() - get_btns_width() - 5
   local current_buf = vim.api.nvim_get_current_buf()
   local has_current = false -- have we seen current buffer yet?
 
@@ -162,7 +162,7 @@ end
 --- @return string
 function M.run()
   local modules = {
-    '%#TbLineFill#' .. string.rep(' ', get_nvim_tree_width() - 1),
+    '%#TbLineFill#' .. string.rep(' ', get_tree_width() - 1),
     M.bufferlist(),
   }
 

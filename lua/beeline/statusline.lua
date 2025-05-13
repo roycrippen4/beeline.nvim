@@ -138,22 +138,26 @@ local function file_info()
     name = ' ' .. name .. ' '
   end
 
+  if vim.bo.ft:find('toggleterm') then
+    return ''
+  end
+
   local filetypes = {
     DressingInput = { icon = '  ', label = 'INPUT BOX' },
     poon = { icon = '  ', label = 'POON' },
     lspinfo = { icon = '  ', label = 'LSP INFO' },
     mason = { icon = '%#StatusLineMason# 󱌣 ', label = 'MASON' },
-    undotree = { icon = '  ', label = 'UNDOTREE' },
-    NvimTree = { icon = '%#StatusLineNvimTree#  ', label = 'NVIMTREE' },
+    NvimTree = { icon = '%#StatusLineFileTree#  ', label = 'FILES' },
+    ['neo-tree'] = { icon = '%#StatusLineFileTree#  ', label = 'FILES' },
     lazy = { icon = '%#StatusLineLazy# 💤 ', label = 'LAZY' },
-    Trouble = { icon = '%#StatusLineTrouble#  ', label = 'TROUBLE' },
+    trouble = { icon = '%#StatusLineTrouble#  ', label = 'TROUBLE' },
     snacks_picker_input = { icon = '  ', label = 'PICKER' },
     snacks_input = { icon = ' 󰙏 ', label = 'INPUT' },
     neotest = { icon = ' 󰙨 ', label = 'NEOTEST' },
   }
 
   for k, v in pairs(filetypes) do
-    if vim.bo.ft:find(k) ~= nil then
+    if vim.bo.ft:find(k) ~= nil or vim.bo.ft == k then
       return v.icon .. v.label .. ' ' .. ''
     end
   end
@@ -337,7 +341,7 @@ autocmd('ModeChanged', {
   group = augroup('StatusLineMode', { clear = true }),
   callback = function()
     local hl = vim.api.nvim_get_hl(0, { name = modes[vim.api.nvim_get_mode().mode].hl })
-    vim.api.nvim_set_hl(0, 'StatusLineNvimTree', { fg = hl.fg, bg = hl.bg, italic = true })
+    vim.api.nvim_set_hl(0, 'StatusLineFileTree', { fg = hl.fg, bg = hl.bg, italic = true })
     vim.api.nvim_set_hl(0, 'StatusLinePoon', { fg = hl.fg, bg = hl.bg, italic = true })
   end,
 })
